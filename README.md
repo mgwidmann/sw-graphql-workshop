@@ -73,7 +73,7 @@ Now running the following query in the left panel of the GraphiQL browser you ge
 
 ```graphql
 query {
-	person(id: 1) {
+  person(id: 1) {
     id
     name
     height
@@ -112,7 +112,7 @@ Enough hand-holding. Write the `World` schema and add a relationship from the `P
 
 ```graphql
 query {
-	person(id: 1) {
+  person(id: 1) {
     homeworld {
       id
       name
@@ -128,7 +128,7 @@ We want to be able to return all the starships piloted by a character. And all t
 
 ```
 query {
-	person(id: 10) {
+  person(id: 10) {
     starships {
       id
       name
@@ -181,7 +181,7 @@ Add a parameter to the name field of `Person` to allow the name to come back as 
 
 ```graphql
 query {
-	person(id: 1) {
+  person(id: 1) {
     name(format: UPPERCASE)
   }
 }
