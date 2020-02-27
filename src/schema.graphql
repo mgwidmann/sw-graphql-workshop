@@ -6,6 +6,7 @@ schema {
 type Query {
   """Say hello to GraphQL and tell it your name!"""
   hello(name: String): String
+
 }
 
 # type Mutation {
