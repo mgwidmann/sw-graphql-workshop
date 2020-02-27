@@ -173,7 +173,7 @@ Then in your resolver you can call:
 PersonLoader.loadMany(starship.pilotIds());
 ```
 
-Make this query work. Add a `starships(id: 1): Starship` type to the `Query` type to allow the user to start at a starship first instead of a person.
+Make this query work. Add a `starships(id: ID!): Starship` type to the `Query` type to allow the user to start at a starship first instead of a person.
 
 ### 5. Parameters
 
@@ -267,12 +267,12 @@ enum TransportationType {
 In the case of `STARSHIP` return `Starship.all<Starship>()`, in the case of `VEHICLE` return `Vehicle.all<Vehicle>()`, and in the case of `ALL` return:
 
 ```typescript
-let transporation: (Starship | Vehicle)[] = Starship.all<Starship>()
-transporation = transporation.concat(Vehicle.all<Vehicle>());
-return transportation;
+let starships: (Starship | Vehicle)[] = Starship.all<Starship>();
+let vehicles: (Starship | Vehicle)[] = Vehicle.all<Vehicle>();
+return starships.map((_, i) => [starships[i], vehicles[i]]).flat().filter((t) => t);
 ```
 
-Then execute a query to get them using the following syntax:
+Then execute a query to get them using the following syntax. The data should alternate between `Starship`s and `Vehicle` objects.
 
 ```graphql
 query {
