@@ -45,14 +45,13 @@ export interface WorldProperties {
 }
 
 export class World extends Base {
-  id: number
   name: string
   rotationPeriod: number
   orbitalPeriod: number
   diameter: number
   climate: Climate[]
   gravity: string
-  // terrain: "grasslands, mountains"
+  terrain: string[]
   surfaceWater: number
   population: number
   residentKeys: string[]
@@ -67,11 +66,12 @@ export class World extends Base {
     this.diameter = parseFloat(properties.diameter);
     this.climate = toClimates(properties.climate);
     this.gravity = properties.gravity;
-    // this.terrain = properties.terrain;
+    this.terrain = properties.terrain.split(',').map((t) => t.trim());
     this.surfaceWater = parseFloat(properties.surface_water);
     this.population = parseInt(properties.population);
     this.residentKeys = properties.residents;
     this.filmKeys = properties.films;
+    this.cacheKeyName = 'planets';
   }
 
   static cacheKeyName(): string {

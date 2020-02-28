@@ -28,6 +28,20 @@ describe('Film', () => {
     }
   });
 
+  it('update', () => {
+    let film = Film.find<Film>(10);
+    expect(film).toBeDefined();
+    if (film != undefined) {
+      film.update({ title: "Updated title" });
+
+      let film2 = Film.find<Film>(10);
+      expect(film2).toBeDefined();
+      if (film2 != undefined) {
+        expect(film2.title).toEqual("Updated title");
+      }
+    }
+  });
+
   it('characters', () => {
     let film = Film.find<Film>(1);
     expect(film).toBeDefined();

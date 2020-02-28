@@ -47,7 +47,6 @@ interface SpeciesProperties {
 }
 
 export class Species extends Base {
-  id: number
   name: string
   classification?: Classification
   designation: Designation
@@ -76,6 +75,7 @@ export class Species extends Base {
     this.homeworldKey = properties.homeworld;
     this.peopleKeys = properties.people;
     this.filmKeys = properties.films;
+    this.cacheKeyName = 'species';
   }
 
   static cacheKeyName(): string {

@@ -299,7 +299,7 @@ In your schema file, to define a new scalar is very easy. Just add the following
 scalar SWYear
 ```
 
-Implement a new `GraphQLScalarType` by filling in the three required functions below.
+Implement a new `GraphQLScalarType` by filling in the three required functions below. When we return data to the client, or receive it, we want to represent it in a string format as described above. But internally, we don't want to parse the integer field out again if we manipulate or perform logic concerning this data. Using a scalar lets us have an implementation like `{ value: number, calendar: SWCalendar }` instead. But the most powerful part of the scalar features is its ability to validate the input such that the query **will not run** when the data is invalid, such as nonsense like `"hello"`.
 
 ```typescript
 import { GraphQLScalarType } from 'graphql';
@@ -309,14 +309,23 @@ import { GraphQLScalarType } from 'graphql';
   SWYear: new GraphQLScalarType({
     name: 'SWYear',
     description: 'Format of years in the Star Wars universe. Before the Battle of Yavin (BBY) only supported format.',
-    // Return the value sent to the client
+    // Takes as input the interal representation of the scalar
+    // Should return the value which we want to send back to the client
+    // Used when YOU give GraphQL this scalar and it needs to be translated to the client
     serialize(value) {
       return fromYear(value);
     },
-    // Receive the value sent from the client
+    // Takes as input the primitive representation of the scalar
+    // Should return the internal representation of the scalar
+    // Used when YOU receive data from GraphQL
     parseValue(value) {
       return toYear(value);
     },
+    // Takes as input the Abstract Syntax Tree (AST) of the query at the node point where
+    // this scalar is being used. The `kind` field indicates what the underlying primitive
+    // type that is used to represent it, in this case a String.
+    // This function is meant as a validation function while GraphQL is walking the graph.
+    // It is typical to try performing the conversion here to ensure everything is valid.
     parseLiteral(ast) {
       if (ast.kind == Kind.STRING) {
         return toYear(ast.value)
@@ -365,4 +374,40 @@ query {
     }
   }
 }
+```
+
+### 10. Simple Mutations
+
+A mutation to update a person's name would look like this:
+
+```
+mutation {
+  personUpdateName(id: 1, name: "George Lucas") {
+    id
+    name
+  }
+}
+```
+
+Try to make this query work by adding this to the schema and adding a `Mutations.personUpdateName` resolver (not in the `Query` key). Use `Person.find<Person>(id)` to get an instance of the person and `person.update({ name: name })` function to update it. _NOTE: The updated values only exist in memory so every change to the source code causing a server reload will reset all changes._
+
+A return value is required, so typically just the primary identifier is returned when you don't need any data back (and you can ignore the response). However, if you do want an update of other fields, here is your chance! You can even get related model data back. For example, after updating the name of the person you can fetch all starships for this person and get all the pilot names that have piloted those ships.
+
+### 11. Input Objects
+
+Mutations won't work well if every field needs to be updated like above. GraphQL defines `input_object`s for the purpose of defining types that are used on input. The person update function you need to make work is the following:
+
+```graphql
+# The name of my input_object is `PersonUpdate`
+mutation UpdatePerson($id: ID!, $person: PersonUpdate) {
+  personUpdate(id: $id, person: $person) {
+    id
+  }
+}
+```
+
+With the query variables set as:
+
+```json
+{"id": 1, "person": {"name": "George Lucas"}}
 ```

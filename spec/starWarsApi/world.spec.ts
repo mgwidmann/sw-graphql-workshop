@@ -31,6 +31,21 @@ describe('World', () => {
     expect(world).toBeTruthy();
   });
 
+  it('update', () => {
+    let world = World.find<World>(20);
+    expect(world).toBeDefined();
+    if (world != undefined) {
+      world.update({ name: "Updated name" });
+
+      let world2 = World.find<World>(20);
+      expect(world2).toBeDefined();
+      if (world2 != undefined) {
+        expect(world2.name).toEqual("Updated name");
+      }
+    }
+  });
+
+
   it('residents', () => {
     let world = World.find<World>(1);
     expect(world).toBeDefined();

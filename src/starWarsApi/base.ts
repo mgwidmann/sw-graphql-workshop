@@ -107,13 +107,15 @@ export interface SWYear {
   calendar: SWCalendar
 }
 
-export function toYear(s: string): SWYear {
+export function toYear(s: string): SWYear | undefined {
   if (s.endsWith('BBY')) {
     return { value: parseInt(s.replace('BBY', '')), calendar: SWCalendar.BBY };
   } else if (s.endsWith('LY')) {
     return { value: parseInt(s.replace('LY', '')), calendar: SWCalendar.LY };
   } else if (s.endsWith('CRC')) {
     return { value: parseInt(s.replace('CRC', '')), calendar: SWCalendar.CRC };
+  } else if (s == 'unknown') {
+    return undefined;
   } else {
     throw `Unsupported Star Wars Year: '${s}'`
   }
@@ -125,9 +127,11 @@ export function fromYear(year: SWYear): string {
 
 export class Base {
   id: number
+  cacheKeyName: string
 
   constructor(properties: { [s: string]: any }) {
     this.id = 0;
+    this.cacheKeyName = '';
   }
 
   static cacheKeyName(): string {
@@ -201,6 +205,14 @@ export class Base {
     return relation.filter(function notEmpty<TValue>(value: TValue | null): value is TValue { return value !== null });
   }
 
+  update(properties: { [key: string]: any }): void {
+    //@ts-ignore
+    let cacheKey = `https://swapi.co/api/${this.cacheKeyName}/${this.id}/`;
+    //@ts-ignore
+    let cachedObj = cache[cacheKey];
+    Object.assign(cachedObj, properties);
+  }
+
   parseIdentifier(url: string): number {
     return Base.parseIdentifier(url);
   }
@@ -212,5 +224,14 @@ export class Base {
       return parseInt(keyId[1]);
     }
     throw `Attempt to parse URL to find identifier failed for URL: ${url}`;
+  }
+
+  static parsePage(url: string): number {
+    let page = url.match(/\?page=(\d+)/);
+    if (page != null) {
+      // page[0] == '/123/' and page[1] == '123'
+      return parseInt(page[1]);
+    }
+    throw `Attempt to parse URL to find page failed for URL: ${url}`;
   }
 }

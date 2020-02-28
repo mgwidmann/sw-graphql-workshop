@@ -21,7 +21,6 @@ export interface VehicleProperties {
 }
 
 export class Vehicle extends Base {
-  id: number
   name: string
   model: string
   manufacturer: string
@@ -52,6 +51,7 @@ export class Vehicle extends Base {
     this.vehicleClass = properties.vehicle_class;
     this.pilotKeys = properties.pilots;
     this.filmKeys = properties.films;
+    this.cacheKeyName = 'vehicles';
   }
 
   static cacheKeyName(): string {

@@ -22,7 +22,6 @@ interface FilmProperties {
 }
 
 export class Film extends Base {
-  id: number
   title: string
   episodeId: number
   openingCrawl: string
@@ -49,6 +48,7 @@ export class Film extends Base {
     this.starshipKeys = properties.starships;
     this.vehicleKeys = properties.vehicles;
     this.speciesKeys = properties.species;
+    this.cacheKeyName = 'films';
   }
 
   static cacheKeyName(): string {

@@ -31,6 +31,21 @@ describe('Starship', () => {
     expect(starship).toBeTruthy();
   });
 
+  it('update', () => {
+    let starship = Starship.find<Starship>(20);
+    expect(starship).toBeDefined();
+    if (starship != undefined) {
+      starship.update({ name: "Updated name" });
+
+      let starship2 = Starship.find<Starship>(20);
+      expect(starship2).toBeDefined();
+      if (starship2 != undefined) {
+        expect(starship2.name).toEqual("Updated name");
+      }
+    }
+  });
+
+
   it('pilots', () => {
     let starship = Starship.find<Starship>(12);
     expect(starship).toBeDefined();

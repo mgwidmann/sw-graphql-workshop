@@ -37,14 +37,13 @@ export function toGender(gender: string): Gender {
 }
 
 export class Person extends Base {
-  id: number
   name: string
   height: number
   mass: number
   hairColor: Color
   skinColor: Color
   eyeColor: Color
-  birthYear: SWYear
+  birthYear?: SWYear
   gender: Gender
   homeworldKey: string
   filmKeys: string[]
@@ -68,6 +67,7 @@ export class Person extends Base {
     this.speciesKeys = properties.species;
     this.vehicleKeys = properties.vehicles;
     this.starshipKeys = properties.starships;
+    this.cacheKeyName = 'people';
   }
 
   static cacheKeyName(): string {

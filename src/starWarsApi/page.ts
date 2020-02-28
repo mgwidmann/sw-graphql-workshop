@@ -16,8 +16,8 @@ export class Page<T extends Base> {
   constructor(type: typeof Base, page: IPage<T>) {
     if (page != undefined) {
       this.count = page.count || 0;
-      this.next = page.next ? Base.parseIdentifier(page.next) : null;
-      this.previous = page.previous ? Base.parseIdentifier(page.previous) : null;
+      this.next = page.next ? Base.parsePage(page.next) : null;
+      this.previous = page.previous ? Base.parsePage(page.previous) : null;
       this.results = (page.results || []).map((r: any) => this.constructResult(type, r));
     } else {
       this.count = 0;

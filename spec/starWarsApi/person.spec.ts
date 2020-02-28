@@ -34,6 +34,20 @@ describe('Person', () => {
     }
   });
 
+  it('update', () => {
+    let person = Person.find<Person>(10);
+    expect(person).toBeDefined();
+    if (person != undefined) {
+      person.update({ name: "Updated name" });
+
+      let person2 = Person.find<Person>(10);
+      expect(person2).toBeDefined();
+      if (person2 != undefined) {
+        expect(person2.name).toEqual("Updated name");
+      }
+    }
+  });
+
   it('homeworld', () => {
     let person = Person.find<Person>(1);
     expect(person).toBeDefined();

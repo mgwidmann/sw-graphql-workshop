@@ -31,6 +31,21 @@ describe('Vehicle', () => {
     expect(vehicle).toBeTruthy();
   });
 
+  it('update', () => {
+    let vehicle = Vehicle.find<Vehicle>(20);
+    expect(vehicle).toBeDefined();
+    if (vehicle != undefined) {
+      vehicle.update({ name: "Updated name" });
+
+      let vehicle2 = Vehicle.find<Vehicle>(20);
+      expect(vehicle2).toBeDefined();
+      if (vehicle2 != undefined) {
+        expect(vehicle2.name).toEqual("Updated name");
+      }
+    }
+  });
+
+
   it('pilots', () => {
     let vehicle = Vehicle.find<Vehicle>(14);
     expect(vehicle).toBeDefined();

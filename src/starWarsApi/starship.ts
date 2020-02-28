@@ -59,7 +59,6 @@ export function toConsumableStorage(s: string): ConsumableStorage | undefined {
 }
 
 export class Starship extends Base {
-  id: number
   name: string
   model: string
   manufacturer: string
@@ -94,6 +93,7 @@ export class Starship extends Base {
     this.starshipClass = properties.starship_class;
     this.pilotKeys = properties.pilots;
     this.filmKeys = properties.films;
+    this.cacheKeyName = 'starships';
   }
 
   static cacheKeyName(): string {

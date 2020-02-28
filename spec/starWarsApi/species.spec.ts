@@ -27,6 +27,20 @@ describe('Species', () => {
     expect(Species.find(1)).toBeTruthy();
   });
 
+  it('update', () => {
+    let species = Species.find<Species>(20);
+    expect(species).toBeDefined();
+    if (species != undefined) {
+      species.update({ name: "Updated name" });
+
+      let species2 = Species.find<Species>(20);
+      expect(species2).toBeDefined();
+      if (species2 != undefined) {
+        expect(species2.name).toEqual("Updated name");
+      }
+    }
+  });
+
   it('people', () => {
     let species = Species.find<Species>(1);
     expect(species).toBeDefined();
