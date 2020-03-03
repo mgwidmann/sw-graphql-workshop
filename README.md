@@ -36,6 +36,16 @@ At the bottom of the page, click `QUERY VARIABLES` and paste in the following:
 
 Hit the ▶️ button to execute your query!
 
+Try running without the name parameter:
+
+```graphql
+query {
+  hello
+}
+```
+
+Notice the name parameter is required, even if you run it it will not accept the query. Its because the parameter is defined as required by using `!` in the type definition.
+
 ## Tasks
 
 ### 1. Create the Person GraphQL Model
